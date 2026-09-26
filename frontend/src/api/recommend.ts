@@ -84,9 +84,7 @@ export async function fetchRecommendations(
 async function getRequestToken() {
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const response = await fetch(
-    `${API_URL}/../request-token`
-  );
+  const response = await fetch(`${API_URL}/request-token`);
 
   if (!response.ok) {
     throw new Error("Could not obtain request token");
@@ -103,7 +101,7 @@ try {
   // Get a fresh, single-use token
   const token = await getRequestToken();
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/recommend`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
