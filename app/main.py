@@ -12,7 +12,7 @@ from slowapi.errors import RateLimitExceeded
 from .models import RecommendationRequest, RecommendationResponse
 from .recommendation import get_recommendations
 from .rate_limit import limiter
-
+from .ai import redis_client
 
 app = FastAPI()
 
@@ -133,6 +133,36 @@ def root():
         "message": "astris API is running"
     }
 
+##redis
+@app.get("/debug-redis")
+def debug_redis():
+    try:
+        # 1. Ping Redis
+        redis_client.ping()
+
+        # 2. Check memory usage & eviction stats
+        info_mem = redis_client.info("memory")
+        info_stats = redis_client.info("stats")
+
+        # 3. List active recommendation keys and their remaining TTLs
+        all_keys = redis_client.keys("rec:*")
+        key_ttl_map = {k: redis_client.ttl(k) for k in all_keys[:10]}
+
+        return {
+            "status": "connected",
+            "used_memory_human": info_mem.get("used_memory_human"),
+            "maxmemory_human": info_mem.get("maxmemory_human"),
+            "evicted_keys_count": info_stats.get("evicted_keys"),
+            "total_rec_keys_count": len(all_keys),
+            "sample_keys_with_ttl_seconds": key_ttl_map,
+        }
+    except Exception as exc:
+        return {
+            "status": "error",
+            "error_type": type(exc).__name__,
+            "message": str(exc),
+        }
+    
 
 @app.get("/request-token")
 @limiter.limit("20/minute")
