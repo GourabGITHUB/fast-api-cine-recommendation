@@ -146,7 +146,7 @@ try {
       throw new ApiError("The engine is taking too long to answer — it may be waking up. Try again.");
     }
     throw new ApiError(
-      "Could not reach the recommendation service — make sure the FastAPI server is running and try again.",
+      "Could not reach the recommendation service server, please try again.",
     );
   } finally {
     window.clearTimeout(timer);

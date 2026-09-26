@@ -30,7 +30,7 @@ app.add_exception_handler(
 
 ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Local React (Vite)
-    "https://your-frontend-name.onrender.com"  #  deployed Render React URL
+    "https://astris-web.onrender.com"  #  deployed Render React URL
 ]
 
 app.add_middleware(
