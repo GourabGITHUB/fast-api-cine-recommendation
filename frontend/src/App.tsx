@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import type { QueryType } from "./api/recommend";
 import { useRecommendations } from "./hooks/useRecommendations";
 import { Backdrop } from "./components/Backdrop";
@@ -35,6 +35,10 @@ export default function App() {
     },
     [request],
   );
+
+  useEffect(() => {
+  fetch("https://astris-k0xu.onrender.com/health");
+}, []);
 
   const handleEditQuery = useCallback(() => {
     inputRef.current?.focus({ preventScroll: false });

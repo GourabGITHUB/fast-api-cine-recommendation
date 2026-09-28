@@ -133,6 +133,11 @@ def root():
         "message": "astris API is running"
     }
 
+#healthcheck
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 ##redis
 @app.get("/debug-redis")
 def debug_redis():
